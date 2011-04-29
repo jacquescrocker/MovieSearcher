@@ -7,6 +7,15 @@ It's build on top of [maddox's](https://github.com/maddox) [imdb-party](https://
 
 Follow me on [Twitter](http://twitter.com/linusoleander) for more info and updates.
 
+## Notice
+
+*2011 - 04 - 29*
+
+I've, due to [this](https://github.com/maddox/imdb-party/issues/8) bug, implemented a temporary `find_by_release_name` method.  
+I's a bit slow, but it works, keep that in mind.
+
+The temporary method is build on top of IMDb.com's auto completion function.
+
 ## What makes this gem so awesome?
 
 MovieSearcher has a really cool feature (*method*) called `find_by_release_name` that makes it possible to search for a movie based on the release name.
