@@ -1,6 +1,9 @@
 require "imdb_party"
 require 'levenshteinish'
-require 'mimer_plus'
+require "mimer_plus"
+require "rest-client"
+require "spot"
+
 class MovieSearcher
   attr_accessor :options, :cleaners
   
@@ -21,14 +24,11 @@ class MovieSearcher
   
   # Finds the movie based on the release name of the movie
   def self.find_by_release_name(search_value, options = {})
+    return if search_value.nil? or search_value.length.zero?
     this = MovieSearcher.new(options.merge(:search_value => search_value.to_s))
     return if this.to_long?
     
-    movie = this.find_the_movie!
-    return if movie.nil?
-    
-    # If the user wants for information about the movie, the {options[:details]} option should be true
-    this.options[:details] ? self.find_movie_by_id(movie.imdb_id) : movie
+    this.find_the_movie!
   end
   
   # Finds the movie based on the nfo file (or similar file)
@@ -86,28 +86,24 @@ class MovieSearcher
   end
   
   def find_the_movie!
-    current =  @split.length
-    
-    until current <= 0 do
-      title = @split.take(current).join(' ')      
-      movies = @options[:imdb].find_by_title(title)
-      break if movies.any? and movies.reject{ |movie| self.shortest(movie, title).nil? }.any?
-      current -= 1 
-    end
-    
-    return if movies.nil? or not movies.any?
+    search = Spot.new.clean!(cleaner(@search_value)).gsub(/\s+/, "_")
 
-    movie = movies.map do |movie| 
-      [movie, self.shortest(movie, title)]
-    end.reject do |value|
-      value.last.nil?
-    end.sort_by do |_,value|
-      value
-    end.first
-    
-    return if movie.nil?
-    
-    ImdbParty::Movie.new(movie.first)
+    run = true
+    count = 0
+    while run
+      run = false
+      begin
+        data = RestClient.get "http://sg.media-imdb.com/suggests/#{search[0]}/#{search[0..(search.length - count)]}.json"
+      rescue RestClient::Exception
+        run = true
+        count += 1
+      end
+      puts "SEARCH: #{search[0..(search.length - count)]}"
+      if not run or count >= search.length
+        iid = data.match(/(tt\d+)/).to_a[1]
+      end
+    end
+    MovieSearcher.find_movie_by_id(iid) if iid
   end
   
   def self.method_missing(method, *args, &block)  

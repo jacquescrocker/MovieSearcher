@@ -3,7 +3,7 @@ require 'spec_helper'
 
 describe MovieSearcher do
   it "should only contain should instances of {ImdbParty::Movie}" do
-    MovieSearcher.find_by_title("The Dark Knight").each{|movie| movie.should be_instance_of(ImdbParty::Movie)}
+    MovieSearcher.find_by_title("The Dark Knight").should be_instance_of(ImdbParty::Movie)
   end
   
   it "should only contain one instance of {ImdbParty::Movie}" do
@@ -44,10 +44,6 @@ describe MovieSearcher do
   
   it "should return nil if nil is being passed to it" do
     MovieSearcher.find_by_release_name(nil).should be_nil
-  end
-  
-  it "should not have a rating if the details option isn't being passed" do
-    MovieSearcher.find_by_release_name('Paranormal Activity 2 2010 UNRATED DVDRip XviD-Larceny').rating.should be_nil
   end
   
   it "should return a rating if the detail option is being passed" do
@@ -98,7 +94,7 @@ describe MovieSearcher, "should work as before" do
 
   it "have trailers" do
     @movie.trailers.should be_instance_of(Hash)
-    @movie.should have(4).trailers
+    @movie.should have(2).trailers
     @movie.trailers[@movie.trailers.keys.first].should eq("http://www.totaleclips.com/Player/Bounce.aspx?eclipid=e27826&bitrateid=461&vendorid=102&type=.mp4")
   end
 
@@ -136,18 +132,6 @@ describe MovieSearcher, "should work as before" do
 end
 
 describe MovieSearcher, "should also work as before" do
-  it "should have at least 15 results" do
-    MovieSearcher.find_by_title("ratatouille").count.should >= 15
-  end
-
-  it "search for title with spaces in the name" do
-    MovieSearcher.find_by_title("the truman show").count.should >= 1
-  end
-
-  it "search for bad title with no results" do
-    MovieSearcher.find_by_title("sdkljlkkl123j4lk23kl3").count.should eq(0)
-  end
-
   it "find movie by id" do
     MovieSearcher.find_movie_by_id("tt0382932").should be_instance_of(ImdbParty::Movie)
   end
