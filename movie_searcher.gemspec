@@ -16,15 +16,11 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
   
-  s.add_dependency('httparty')
-  s.add_dependency('levenshteinish')
-  s.add_dependency('mimer_plus')
+  s.add_dependency("httparty")
+  s.add_dependency("levenshteinish")
+  s.add_dependency("mimer_plus")
   s.add_dependency("spot")
   s.add_dependency("rest-client")
   
-  s.add_development_dependency('rspec')
-  s.add_development_dependency('autotest-standalone')
-  s.add_development_dependency('autotest')
-  s.add_development_dependency('autotest-growl')
-  s.add_development_dependency('autotest-fsevent')
+  s.add_development_dependency("rspec")
 end
