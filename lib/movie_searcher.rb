@@ -98,7 +98,7 @@ class MovieSearcher
         run = true
         count += 1
       end
-      puts "SEARCH: #{search[0..(search.length - count)]}"
+      
       if not run or count >= search.length
         iid = data.match(/(tt\d+)/).to_a[1]
       end
