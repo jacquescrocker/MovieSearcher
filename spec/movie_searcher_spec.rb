@@ -3,7 +3,7 @@ require 'spec_helper'
 
 describe MovieSearcher do
   it "should only contain should instances of {ImdbParty::Movie}" do
-    MovieSearcher.find_by_title("The Dark Knight").should be_instance_of(ImdbParty::Movie)
+    MovieSearcher.find_by_title("The Dark Knight").each {|m| m.should be_instance_of(ImdbParty::Movie) }
   end
   
   it "should only contain one instance of {ImdbParty::Movie}" do
@@ -94,7 +94,7 @@ describe MovieSearcher, "should work as before" do
 
   it "have trailers" do
     @movie.trailers.should be_instance_of(Hash)
-    @movie.should have(2).trailers
+    @movie.should have(1).trailers
     @movie.trailers[@movie.trailers.keys.first].should eq("http://www.totaleclips.com/Player/Bounce.aspx?eclipid=e27826&bitrateid=461&vendorid=102&type=.mp4")
   end
 
