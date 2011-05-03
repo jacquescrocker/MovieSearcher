@@ -121,3 +121,7 @@ The `actors`, `writers` and `directors` accessors returns an `ImdbParty::Person`
 ## Requirements
 
 *MovieSearcher* is tested in OS X 10.6.6, 10.6.7 using Ruby 1.8.7 and 1.9.2
+
+## License
+
+*MovieSearcher* is released under the *MIT license*.
